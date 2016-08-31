@@ -1,9 +1,5 @@
 package org.wbs;
 
-import static spark.Spark.*;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
 import java.util.List;
 
 /**
@@ -17,17 +13,26 @@ public class App
         LoadDriver ld = new LoadDriver();
         LinReg linre = new LinReg();
 
+        ld.main();
+        linre.start();
 
-        get("/pred", (request, response) -> {
-            ld.main();
-            linre.start();
+        List<String> filenames = ld.getFilenames();
+        for(String filename : filenames){
+            linre.makePrediction(filename);
+        }
+        linre.stop();
 
-            List<String> filenames = ld.getFilenames();
-            for(String filename : filenames){
-                linre.makePrediction(filename);
-            }
-            linre.stop();
-            return "Done!!";
-        });
+
+//        get("/pred", (request, response) -> {
+//            ld.main();
+//            linre.start();
+//
+//            List<String> filenames = ld.getFilenames();
+//            for(String filename : filenames){
+//                linre.makePrediction(filename);
+//            }
+//            linre.stop();
+//            return "Done!!";
+//        });
     }
 }

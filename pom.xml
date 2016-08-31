@@ -2,22 +2,55 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>org.wbs</groupId>
+  <groupId>wbs</groupId>
   <artifactId>RestFulJava</artifactId>
   <version>1.0.0</version>
   <build>
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-compiler-plugin</artifactId>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>copy-dependencies</id>
+            <phase>prepare-package</phase>
+            <goals>
+              <goal>copy-dependencies</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>${project.build.directory}/lib</outputDirectory>
+              <overWriteReleases>false</overWriteReleases>
+              <overWriteSnapshots>false</overWriteSnapshots>
+              <overWriteIfNewer>true</overWriteIfNewer>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <!--<plugin>-->
+        <!--<groupId>org.apache.maven.plugins</groupId>-->
+        <!--<artifactId>maven-compiler-plugin</artifactId>-->
+        <!--<configuration>-->
+          <!--<source>1.8</source>-->
+          <!--<target>1.8</target>-->
+        <!--</configuration>-->
+      <!--</plugin>-->
+      <plugin>
+        <!-- Build an executable JAR -->
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <version>3.0.2</version>
         <configuration>
-          <source>1.8</source>
-          <target>1.8</target>
+          <archive>
+            <manifest>
+              <addClasspath>true</addClasspath>
+              <classpathPrefix>lib/</classpathPrefix>
+              <mainClass>org.wbs.App</mainClass>
+            </manifest>
+          </archive>
         </configuration>
       </plugin>
     </plugins>
   </build>
-  <packaging>jar</packaging>
 
   <name>RestFulJava</name>
 
@@ -34,11 +67,11 @@
       <artifactId>spark-core</artifactId>
       <version>2.3</version>
     </dependency>
-    <dependency>
-      <groupId>com.google.code.gson</groupId>
-      <artifactId>gson</artifactId>
-      <version>2.3.1</version>
-    </dependency>
+    <!--<dependency>-->
+      <!--<groupId>com.google.code.gson</groupId>-->
+      <!--<artifactId>gson</artifactId>-->
+      <!--<version>2.3.1</version>-->
+    <!--</dependency>-->
     <dependency>
       <groupId>org.scala-lang</groupId>
       <artifactId>scala-library</artifactId>
@@ -69,11 +102,11 @@
       <artifactId>json</artifactId>
       <version>20160810</version>
     </dependency>
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>3.8.1</version>
-      <scope>test</scope>
-    </dependency>
+    <!--<dependency>-->
+      <!--<groupId>junit</groupId>-->
+      <!--<artifactId>junit</artifactId>-->
+      <!--<version>3.8.1</version>-->
+      <!--<scope>test</scope>-->
+    <!--</dependency>-->
   </dependencies>
 </project>
