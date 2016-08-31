@@ -34,11 +34,11 @@ public class LinReg {
     public static SparkSession spark= null;
 
     public void start(){
-        conf = new SparkConf().setAppName("Test").setMaster("local[4]").set("spark.sql.warehouse.dir", "/home/cristu/Proyectos/RestFulJava/");
+        conf = new SparkConf().setAppName("Predictions").setMaster("local[4]").set("spark.sql.warehouse.dir", "/home/cristu/Proyectos/RestFulJava/");
         sc = new JavaSparkContext(conf);
         spark = SparkSession
                 .builder()
-                .appName("Test-SQL")
+                .appName("Predictions-SQL")
                 .master("local[4]")
                 .getOrCreate();
     }
@@ -121,7 +121,7 @@ public class LinReg {
 
         data.show();
 
-        Dataset<Row>[] splits = data.randomSplit(new double[]{0.75, 0.25});
+        Dataset<Row>[] splits = data.randomSplit(new double[]{0.70, 0.30});
         Dataset<Row> trainingData = splits[0];
         Dataset<Row> testDatab = splits[1];
 
