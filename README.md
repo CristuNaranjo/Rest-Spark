@@ -1,6 +1,10 @@
 # Rest-Spark
 REST + Apache Spark
 
+Para generar el proyecto, entrar en una terminal en la carpeta del proyecto y utlizar el comando:
+
+*mvn package*
+
 ##App
 
 ###main
