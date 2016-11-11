@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Properties;
 
 /**
- * Hello world!
+ * Hello Moto!
  *
  */
 public class App 
@@ -21,12 +21,9 @@ public class App
         //Leer fichero con propiedades de la base de datos
         String dbString,user,password,dbOut,dbOutTable = null;
         FileInputStream file;
-       // String path = "/home/cristu/Proyectos/RestFulJava/target/prop.properties";
         String path = App.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath();
         path = path.substring(0, path.lastIndexOf("/") + 1);
-        //String path = ClassLoader.getSystemClassLoader().getResource(".").getPath();
         path+="prop.properties";
-        System.out.println(path);
         Properties mainProperties = new Properties();
         file = new FileInputStream(path);
         mainProperties.load(file);
@@ -54,18 +51,5 @@ public class App
             linre.makePrediction(filename,dbLinReg);
         }
         linre.stop();
-
-
-//        get("/pred", (request, response) -> {
-//            ld.main();
-//            linre.start();
-//
-//            List<String> filenames = ld.getFilenames();
-//            for(String filename : filenames){
-//                linre.makePrediction(filename);
-//            }
-//            linre.stop();
-//            return "Done!!";
-//        });
     }
 }

@@ -23,20 +23,12 @@ public class LoadDriver {
         try {
             Class.forName("com.mysql.jdbc.Driver").newInstance();
             Connection conn = null;
-//            new LinReg();
             try {
-                /*
-                conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/reviews", "root", "1");
-                */
                 conn = DriverManager.getConnection(dataDb.get(0), dataDb.get(1), dataDb.get(2));
-//                        +
-//                        "user=root&password=1");
                 Statement stmt = null;
                 ResultSet rs = null;
                 ResultSet rsFilter = null;
                 Statement statFilter = null;
-//                List<String> filenames = new ArrayList<String>();
-
                 try {
                     stmt = conn.createStatement();
                     rs = stmt.executeQuery("SELECT DISTINCT user_id FROM social_reviews");
@@ -45,29 +37,14 @@ public class LoadDriver {
                     while(rs.next()) { // convert each object to an human readable JSON object
                         for(int i=1;i<=columnCnt;i++) {
                             String value = rs.getString(i);
-//                            int valueInt = rs.getInt(i);
                             String query = "SELECT * FROM social_reviews WHERE user_id=" + value;
-                            System.out.println(query);
                             statFilter = conn.createStatement();
 
                             rsFilter = statFilter.executeQuery(query);
 
                             List<JSONObject> result =  getFormattedResult(rsFilter);
-                            //Prueba para no generar ficheros
                             String filename = String.valueOf(result);
-                            /*
-                            String filename = "resources/file" +rs.getString(i) + ".json";
-                            System.out.println(filename);
-                            */
                             filenames.add(filename);
-                            System.out.println(filename);
-                            /*
-                            try (FileWriter file = new FileWriter(filename)) {
-                                file.write(String.valueOf(result));
-                                System.out.println("Successfully Copied JSON Object to File...");
-//                                LinReg.makePrediction(rs.getString(i),filename);
-                            }
-                            */
                         }
                     }
 
