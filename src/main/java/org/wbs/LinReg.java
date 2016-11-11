@@ -2,6 +2,7 @@ package org.wbs;
 
 import org.apache.commons.math3.util.Precision;
 import org.apache.spark.SparkConf;
+import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.api.java.function.FilterFunction;
 import org.apache.spark.ml.linalg.VectorUDT;
@@ -49,9 +50,9 @@ public class LinReg {
 //            .getOrCreate();
 
 
-    public static void makePrediction(String filename) {
+    public static void makePrediction(String filename, List<String> dataDb) {
 
-        System.out.println("Hello Spark");
+        System.out.println("Starting Spark");
 //        System.out.println(user);
 //        SparkConf conf = new SparkConf().setAppName("Test").setMaster("local[4]").set("spark.sql.warehouse.dir", "/home/cristu/Proyectos/RestFulJava/");
 //        JavaSparkContext sc = new JavaSparkContext(conf);
@@ -67,7 +68,10 @@ public class LinReg {
 
 //        Dataset<Row> df = spark.read().json("resources/social_reviews.json");
 //        Dataset<Row> df = spark.read().json("resources/file.json");
-        Dataset<Row> df = spark.read().json(filename);
+        List<String> dataJson = new ArrayList<String>();
+        dataJson.add(filename);
+        JavaRDD<String> dataSpark = sc.parallelize(dataJson);
+        Dataset<Row> df = spark.read().json(dataSpark);
 
 
         df.show();
@@ -124,16 +128,16 @@ public class LinReg {
         long numData = dfrows.count();
 
         List<Row> testList = testDatab.collectAsList();
-        List<Row> myTestList = new ArrayList<Row>();
-        myTestList.addAll(testList);
+        List<Row> myPredictList = new ArrayList<Row>();
+        myPredictList.addAll(testList);
 
         //*********************** Add new comments for make predictions ***************************
         int commentsToAdd = 1;
 
         for (int i = 0; i < commentsToAdd; i++) {
-            myTestList.add(RowFactory.create(Vectors.dense(new Double(numData + i )), user_id, 0.0, 0.0, 0.0));
+            myPredictList.add(RowFactory.create(Vectors.dense(new Double(numData + i )), user_id, 0.0, 0.0, 0.0));
         }
-        Dataset<Row> testData = spark.createDataFrame(myTestList, schema);
+        Dataset<Row> predictData = spark.createDataFrame(myPredictList, schema);
 
 
         GeneralizedLinearRegression glr = new GeneralizedLinearRegression()
@@ -176,9 +180,9 @@ public class LinReg {
 //        System.out.println("Deviance Residuals: ");
 //        summary.residuals().show();
 
-        Dataset<Row> resultsPos = modelPos.transform(testData);
-        Dataset<Row> resultsNeu = modelNeu.transform(testData);
-        Dataset<Row> resultsNeg = modelNeg.transform(testData);
+        Dataset<Row> resultsPos = modelPos.transform(predictData);
+        Dataset<Row> resultsNeu = modelNeu.transform(predictData);
+        Dataset<Row> resultsNeg = modelNeg.transform(predictData);
 
         List<Row> listPos = resultsPos.collectAsList();
         List<Row> listNeu = resultsNeu.collectAsList();
@@ -219,7 +223,10 @@ public class LinReg {
         prop.setProperty("driver", "com.mysql.jdbc.Driver");
 
 //        results.select("predPositive","predNeutral", "predNegative").write().jdbc("jdbc:mysql://localhost:3306/","reviews.predictions",prop);
-        resWrite.write().mode("append").jdbc("jdbc:mysql://localhost:3306/", "reviews.predictions", prop);
+
+        //resWrite.write().mode("append").jdbc("jdbc:mysql://localhost:3306/", "reviews.predictions", prop);
+
+        resWrite.write().mode("append").jdbc(dataDb.get(0), dataDb.get(1), prop);
 
 //        resultsPos.show();
 //        resultsNeu.show();

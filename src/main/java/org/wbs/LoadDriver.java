@@ -19,13 +19,16 @@ public class LoadDriver {
 
     public static List<String> filenames = new ArrayList<String>();
 
-    public void main(){
+    public void main(List<String> dataDb){
         try {
             Class.forName("com.mysql.jdbc.Driver").newInstance();
             Connection conn = null;
 //            new LinReg();
             try {
+                /*
                 conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/reviews", "root", "1");
+                */
+                conn = DriverManager.getConnection(dataDb.get(0), dataDb.get(1), dataDb.get(2));
 //                        +
 //                        "user=root&password=1");
                 Statement stmt = null;
@@ -50,16 +53,21 @@ public class LoadDriver {
                             rsFilter = statFilter.executeQuery(query);
 
                             List<JSONObject> result =  getFormattedResult(rsFilter);
-
+                            //Prueba para no generar ficheros
+                            String filename = String.valueOf(result);
+                            /*
                             String filename = "resources/file" +rs.getString(i) + ".json";
                             System.out.println(filename);
+                            */
                             filenames.add(filename);
-
+                            System.out.println(filename);
+                            /*
                             try (FileWriter file = new FileWriter(filename)) {
                                 file.write(String.valueOf(result));
                                 System.out.println("Successfully Copied JSON Object to File...");
 //                                LinReg.makePrediction(rs.getString(i),filename);
                             }
+                            */
                         }
                     }
 
