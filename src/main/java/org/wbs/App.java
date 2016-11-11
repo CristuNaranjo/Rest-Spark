@@ -43,6 +43,8 @@ public class App
         List<String> dbLinReg = new ArrayList<String>();
         dbLinReg.add(dbOut);
         dbLinReg.add(dbOutTable);
+        dbLinReg.add(user);
+        dbLinReg.add(password);
 
         ld.main(dbLoadDriver);
         linre.start();

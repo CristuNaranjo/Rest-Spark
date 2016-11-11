@@ -218,8 +218,8 @@ public class LinReg {
 
 
         Properties prop = new Properties();
-        prop.setProperty("user", "root");
-        prop.setProperty("password", "1");
+        prop.setProperty("user", dataDb.get(2));
+        prop.setProperty("password", dataDb.get(3));
         prop.setProperty("driver", "com.mysql.jdbc.Driver");
 
 //        results.select("predPositive","predNeutral", "predNegative").write().jdbc("jdbc:mysql://localhost:3306/","reviews.predictions",prop);
